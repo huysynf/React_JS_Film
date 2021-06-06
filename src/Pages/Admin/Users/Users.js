@@ -25,8 +25,8 @@ const Users = () => {
   
   const classes = useStyles();
   const dispatch = useDispatch();
-  useEffect(async () => {
-    await dispatch(fetchUsers());
+  useEffect( () => {
+     dispatch(fetchUsers());
     return () => {
     };
   }, [dispatch]);

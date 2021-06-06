@@ -14,7 +14,14 @@ import LockIcon from '@material-ui/icons/Lock';
 import MailIcon from '@material-ui/icons/Mail';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
-import {getStatus, loginAsync} from '../../../features/auth/authSlide';
+import {
+  resetError,
+  getError, getErrors,
+  getLoading,
+  loginAsync,
+} from '../../../features/auth/authSlide';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import MessageError from '../../../components/Error/MessageError';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -23,8 +30,10 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '100vw',
   },
-  button: {
+  loginButton: {
     margin: theme.spacing(1),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loginButtonWrap: {
     textAlign: 'center',
@@ -39,21 +48,28 @@ function Login(props) {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const status = useSelector(getStatus);
+  const loading = useSelector(getLoading);
+  
+  const error = useSelector(getError);
+  const errors = useSelector(getErrors);
   
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  const login = async ()=>{
+  const login = async () => {
     let data = {
       email,
-      password
+      password,
     };
-    console.log(status);
+    dispatch(resetError);
     await dispatch(loginAsync(data));
-    console.log(status);
+  };
   
-  }
+  const clearError = () => {
+    if ((errors && errors.length > 0) || (error && error != '')) {
+      dispatch(resetError());
+    }
+  };
   
   return (
       <Grid container
@@ -69,13 +85,18 @@ function Login(props) {
               <Input
                   id="input-with-icon-adornment"
                   value={email}
-                  onChange={(e)=>{setEmail(e.target.value)}}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    clearError();
+                  }}
                   startAdornment={
                     <InputAdornment position="start">
                       <MailIcon/>
                     </InputAdornment>
                   }
               />
+              <MessageError message={errors?.email}
+                            className={'error error--email'}/>
             </FormControl>
           </Grid>
           <Grid className={'mt-4'}>
@@ -86,7 +107,10 @@ function Login(props) {
                   id="standard-adornment-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e)=>{setPassword(e.target.value)}}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    clearError();
+                  }}
                   startAdornment={
                     <InputAdornment position="start">
                       <LockIcon/>
@@ -96,7 +120,7 @@ function Login(props) {
                     <InputAdornment position="end">
                       <IconButton
                           aria-label="toggle password visibility"
-                          onClick={()=>setShowPassword(!showPassword)}
+                          onClick={() => setShowPassword(!showPassword)}
                           onMouseDown={handleMouseDownPassword}
                       >
                         {showPassword ? <Visibility/> : <VisibilityOff/>}
@@ -104,21 +128,25 @@ function Login(props) {
                     </InputAdornment>
                   }
               />
+              <MessageError message={errors?.password}
+                            className={'error error--password'}/>
+              <MessageError message={error} className={'error error--login'}/>
             </FormControl>
           </Grid>
           <Grid
-                className={classes.loginButtonWrap}
+              className={classes.loginButtonWrap}
           >
             <Button
                 variant="outlined"
                 color="primary"
-                className={classes.button}
+                className={classes.loginButton}
                 onClick={login}
                 endIcon={
-                  <ExitToAppIcon/>
+                  loading ? (<CircularProgress className={'pl-1'} size={18}/>)
+                      : (<ExitToAppIcon/>)
                 }
             >
-              Login
+              {loading ? 'Signing...' : 'SignIn'}
             </Button>
           </Grid>
         </Card>

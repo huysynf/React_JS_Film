@@ -1,6 +1,5 @@
 import axios from 'axios';
 import store from '../app/store';
-import {config} from 'dotenv';
 
 const instance = axios.create({
   baseURL: 'http://localhost/api/',
@@ -10,7 +9,7 @@ instance.defaults.headers.common['Accept'] = 'application/json';
 
 instance.interceptors.request.use(config => {
       let accessToken = store.getState()?.auth?.accessToken;
-      if (accessToken != '') {
+      if (accessToken !== '' || accessToken !== null || accessToken !== undefined) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
       return config;
@@ -24,11 +23,10 @@ instance.interceptors.response.use(
     response => response,
     ({response}) => {
       let refreshToken = localStorage.getItem('refresh');
-      if (response.status === 401 && refreshToken != '') {
+      if (response.status === 401 && (refreshToken !== '' || refreshToken !== undefined || refreshToken !== null)) {
         //get refresh to ken
       }
-      
-      return response;
+      return  Promise.reject(response);
     },
 );
 export default instance;
