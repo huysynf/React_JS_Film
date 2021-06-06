@@ -1,12 +1,44 @@
-import React from "react";
-import "./App.css";
-import Login from './features/auth/Login';
+import React, {lazy, Suspense} from 'react';
+import './App.css';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Header from './Pages/Admin/Layout/Header';
+
+const Login = lazy(() =>
+    import( './Pages/Admin/Auth/Login'),
+);
+const DashBoard = lazy(() =>
+    import( './Pages/Admin/DashBoard/DashBoard'),
+);
+const Home = lazy(() =>
+    import( './Pages/Client/Home/Home'),
+);
+const Users = lazy(() =>
+    import('./Pages/Admin/Users/Users'),
+);
 
 function App() {
   return (
-    <div className="App">
-      <Login />
-    </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Router>
+          <Header/>
+          <Switch>
+            
+            <Route exact={true} path={'/login'}>
+              <Login/>
+            </Route>
+            <Route exact path={'/dashboard'}>
+              <DashBoard/>
+            </Route>
+            <Route exact path={'/'}>
+              <Home/>
+            </Route>
+            <Route exact path={'/users'}>
+              <Users/>
+            </Route>
+          </Switch>
+        </Router>
+      </Suspense>
+  
   );
 }
 

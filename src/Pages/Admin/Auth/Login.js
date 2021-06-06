@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Input from '@material-ui/core/Input';
@@ -13,54 +14,52 @@ import LockIcon from '@material-ui/icons/Lock';
 import MailIcon from '@material-ui/icons/Mail';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
-
+import {getStatus, loginAsync} from '../../../features/auth/authSlide';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: '100%',
     maxWidth: '100%',
     height: '100vh',
-    width: '100vw'
+    width: '100vw',
   },
   button: {
     margin: theme.spacing(1),
   },
   loginButtonWrap: {
     textAlign: 'center',
-    marginTop: '1rem'
-  }
+    marginTop: '1rem',
+  },
 }));
 
 function Login(props) {
   
-  
   const classes = useStyles();
-  
-  const [values, setValues] = React.useState({
-    amount: '',
-    password: '',
-    weight: '',
-    weightRange: '',
-    showPassword: false,
-  });
-  
-  const handleChange = (prop) => (event) => {
-    setValues({...values, [prop]: event.target.value});
-  };
-  
-  const handleClickShowPassword = () => {
-    setValues({...values, showPassword: !values.showPassword});
-  };
+  const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const status = useSelector(getStatus);
   
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const login = async ()=>{
+    let data = {
+      email,
+      password
+    };
+    console.log(status);
+    await dispatch(loginAsync(data));
+    console.log(status);
+  
+  }
   
   return (
       <Grid container
-            justify={'center'}
             alignItems="center"
             className={classes.container}
+            justify={'center'}
       >
         <Card className={'p-5'}>
           <h3 className={'text-center'}>Sign In</h3>
@@ -69,6 +68,8 @@ function Login(props) {
               <InputLabel htmlFor="input-with-icon-adornment">Email</InputLabel>
               <Input
                   id="input-with-icon-adornment"
+                  value={email}
+                  onChange={(e)=>{setEmail(e.target.value)}}
                   startAdornment={
                     <InputAdornment position="start">
                       <MailIcon/>
@@ -83,9 +84,9 @@ function Login(props) {
                   htmlFor="standard-adornment-password">Password</InputLabel>
               <Input
                   id="standard-adornment-password"
-                  type={values.showPassword ? 'text' : 'password'}
-                  value={values.password}
-                  onChange={handleChange('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e)=>{setPassword(e.target.value)}}
                   startAdornment={
                     <InputAdornment position="start">
                       <LockIcon/>
@@ -95,25 +96,26 @@ function Login(props) {
                     <InputAdornment position="end">
                       <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
+                          onClick={()=>setShowPassword(!showPassword)}
                           onMouseDown={handleMouseDownPassword}
                       >
-                        {values.showPassword ? <Visibility/> : <VisibilityOff/>}
+                        {showPassword ? <Visibility/> : <VisibilityOff/>}
                       </IconButton>
                     </InputAdornment>
                   }
               />
             </FormControl>
           </Grid>
-          <Grid justify={'center'}
+          <Grid
                 className={classes.loginButtonWrap}
           >
             <Button
                 variant="outlined"
                 color="primary"
                 className={classes.button}
+                onClick={login}
                 endIcon={
-                  <ExitToAppIcon />
+                  <ExitToAppIcon/>
                 }
             >
               Login
