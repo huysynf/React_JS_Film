@@ -1,63 +1,41 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
-import {auth, provider} from '../firebase';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {
-  selectUserName,
-  selectUserPhoto,
-  setSignOutState, setUserLoginDetails,
-} from '../features/users/userSlide';
+import {getUser} from '../../../features/auth/authSlide';
 
 
 const Header = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const userName = useSelector(selectUserName);
-  const userPhoto = useSelector(selectUserPhoto);
+  const user = useSelector(getUser)
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
+   
       if (user) {
         setUser(user);
         history.push('/home');
       }
-    });
     return () => {
     };
-  }, [userName]);
+  }, [dispatch]);
 
   const handleAuth = () => {
 
-    if (!userName) {
-      auth.signInWithPopup(provider)
-          .then(res => {
-            setUser(res.user)
-          })
-          .catch(err => {
-            console.log(err);
-          });
-    } else if (userName) {
-      auth.signOut()
-          .then(res => {
-            dispatch(setSignOutState());
-            history.push('/');
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    if (!user) {
+    
     }
   };
 
   const setUser = (user) => {
 
-    dispatch(setUserLoginDetails({
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL
-    }))
+    // dispatch(setUserLoginDetails({
+    //   name: user.displayName,
+    //   email: user.email,
+    //   photo: user.photoURL
+    // }))
   }
 
   return (
@@ -65,11 +43,9 @@ const Header = () => {
         <Logo>
           <img src="/images/logo.svg" alt=""/>
         </Logo>
-        {!userName ?
+        {!user ?
             (
-                <Login onClick={() => {
-                  handleAuth();
-                }}
+                <Login to={'/login'}
                 >
                   Login
                 </Login>
@@ -108,7 +84,7 @@ const Header = () => {
                   </Link>
                 </NavMenu>
                 <SignOut>
-                  <UserImage src ={userPhoto} title={userName} alt ={userName} />
+                  <UserImage src ={user?.image} title={user?.name} alt ={user?.name} />
                   <Dropdown>
                     <span onClick={()=>{handleAuth()}}>SignOut</span>
                   </Dropdown>
@@ -217,7 +193,7 @@ const NavMenu = styled.div`
   }
 `;
 
-const Login = styled.a`
+const Login = styled(Link)`
   background-color: rgba(8, 0, 0, 8, .6);
   padding: 8px 16px;
   text-transform: uppercase;

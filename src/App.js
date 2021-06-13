@@ -1,7 +1,7 @@
 import React, {lazy, Suspense} from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Header from './Pages/Admin/Layout/Header';
+import Header from './Pages/Client/Layout/Header';
 import Loading from './components/Loading/Loading';
 
 const Login = lazy(() =>
@@ -21,7 +21,6 @@ function App() {
   return (
       <Suspense fallback={<Loading ></Loading>}>
         <Router>
-          <Header/>
           <Switch>
             <Route exact={true} path={'/login'}>
               <Login/>
@@ -30,6 +29,7 @@ function App() {
               <DashBoard/>
             </Route>
             <Route exact path={'/'}>
+              <Header />
               <Home/>
             </Route>
             <Route exact path={'/users'}>

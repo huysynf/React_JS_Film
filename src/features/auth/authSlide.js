@@ -53,11 +53,11 @@ const authSlide = createSlice({
   },
 });
 
-export const getStatus = state => state.auth.status;
-export const getLoading = state => state.auth.loading;
-export const getUser = state => state.auth?.users;
-export const getErrors = state => state.auth.errors;
-export const getError = state => state.auth.error;
+export const getStatus = state => state?.auth?.status;
+export const getLoading = state => state?.auth?.loading;
+export const getUser = state => state?.auth?.users;
+export const getErrors = state => state?.auth?.errors;
+export const getError = state => state?.auth?.error;
 
 export const {resetError} = authSlide.actions;
 export default authSlide.reducer;
