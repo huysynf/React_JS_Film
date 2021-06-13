@@ -1,26 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {useParams} from 'react-router-dom';
+import axios from '../../../config/axios';
 
 const Detail = () => {
   const {id} = useParams();
   const [detail, setDetail] = useState({});
 
-  useEffect(() => {
-    // const getDetail = () => db.collection('movies')
-    //     .doc(id)
-    //     .get()
-    //     .then(doc => {
-    //       if (doc.exists) {
-    //         setDetail(doc.data());
-    //       } else {
-    //         console.log('not data');
-    //       }
-    //     }).catch(error => {
-    //       console.log('has error', error);
-    //     });
+  useEffect(async () => {
+        try{
+          const res = await axios.get('films/'+id)
+            setDetail(res.data.data)
+        }catch (e)
+        {
+        
+        }
+    
     return () => {
-      // getDetail();
     };
   }, [id]);
 
@@ -29,13 +25,13 @@ const Detail = () => {
       <Container>
         <Background>
           <img
-              src={detail.backgroundImg}
+              src={detail.background_img}
               alt={detail.title}/>
         </Background>
 
         <ImageTitle>
           <img
-              src={detail.titleImg}
+              src={detail.title_img}
               alt={detail.title} />
         </ImageTitle>
         <ContentMela>

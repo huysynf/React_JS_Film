@@ -3,7 +3,7 @@ import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Header from './Pages/Client/Layout/Header';
 import Loading from './components/Loading/Loading';
-
+import Detail from './Pages/Client/Film/Detail';
 const Login = lazy(() =>
     import( './Pages/Admin/Auth/Login'),
 );
@@ -31,6 +31,10 @@ function App() {
             <Route exact path={'/'}>
               <Header />
               <Home/>
+            </Route>
+            <Route exact path={'/details/:id'}>
+              <Header />
+              <Detail />
             </Route>
             <Route exact path={'/users'}>
               <Users/>
