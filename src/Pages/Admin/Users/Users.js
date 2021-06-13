@@ -55,7 +55,7 @@ const Users = () => {
                     <TableCell align="right">{user.email}</TableCell>
                     <TableCell align="right">{user.phone}</TableCell>
                     <TableCell align="right">
-                      {user.gender == 1
+                      {user.gender === 1
                           ? <AccessibilityIcon color={'primary'}/>
                           : <PregnantWomanIcon color={'secondary'}/>
                       }

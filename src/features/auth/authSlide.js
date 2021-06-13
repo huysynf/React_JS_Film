@@ -30,34 +30,34 @@ const authSlide = createSlice({
     }
   },
   extraReducers: {
-    [loginAsync.pending]: (state, action) => {
-      state.loading = true;
-      state.status = 'loading';
-    },
-    [loginAsync.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.status = 'idle';
-      let {access_token,refresh_token, user} =action.payload.data.data;
-      state.accessToken = access_token;
-      state.user = user;
-      state.errors = []
-      state.error = ''
-      localStorage.refresh = refresh_token;
-    },
-    [loginAsync.rejected]: (state, action) => {
-      state.loading = false;
-      state.status = 'error';
-      state.errors = action?.payload?.data?.errors
-      state.error = action?.payload?.data?.data?.error
-    },
+    // [loginAsync.pending]: (state, action) => {
+    //   state.loading = true;
+    //   state.status = 'loading';
+    // },
+    // [loginAsync.fulfilled]: (state, action) => {
+    //   state.loading = false;
+    //   state.status = 'idle';
+    //   let {access_token,refresh_token, user} =action.payload.data.data;
+    //   state.accessToken = access_token;
+    //   state.user = user;
+    //   state.errors = []
+    //   state.error = ''
+    //   localStorage.refresh = refresh_token;
+    // },
+    // [loginAsync.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.status = 'error';
+    //   state.errors = action?.payload?.data?.errors
+    //   state.error = action?.payload?.data?.data?.error
+    // },
   },
 });
 
-export const getStatus = state => state?.auth?.status;
-export const getLoading = state => state?.auth?.loading;
-export const getUser = state => state?.auth?.users;
-export const getErrors = state => state?.auth?.errors;
-export const getError = state => state?.auth?.error;
+// export const getStatus = state => state.auth.status;
+// export const getLoading = state => state.auth.loading;
+// export const getUser = state => state.auth?.users;
+// export const getErrors = state => state.auth.errors;
+// export const getError = state => state.auth.error;
 
 export const {resetError} = authSlide.actions;
 export default authSlide.reducer;

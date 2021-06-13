@@ -18,8 +18,8 @@ import {
   resetError,
   getError, getErrors,
   getLoading,
-  loginAsync,
-} from '../../../features/auth/authSlide';
+  loginAsync, getUserCurrent,
+} from '../../../features/user/userSlide';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import MessageError from '../../../components/Error/MessageError';
 
@@ -52,7 +52,6 @@ function Login(props) {
   
   const error = useSelector(getError);
   const errors = useSelector(getErrors);
-  
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -65,8 +64,9 @@ function Login(props) {
     await dispatch(loginAsync(data));
   };
   
+  
   const clearError = () => {
-    if ((errors && errors.length > 0) || (error && error != '')) {
+    if ((errors && errors.length > 0) || (error && error !== '' && error !== undefined && error !== null )) {
       dispatch(resetError());
     }
   };

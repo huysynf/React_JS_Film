@@ -3,40 +3,23 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {getUser} from '../../../features/auth/authSlide';
-
 
 const Header = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector(getUser)
-
+  const user = useSelector(state=>state.user)
   useEffect(() => {
-   
-      if (user) {
-        setUser(user);
-        history.push('/home');
-      }
+    console.log(user);
     return () => {
     };
   }, [dispatch]);
 
   const handleAuth = () => {
-
     if (!user) {
     
     }
   };
-
-  const setUser = (user) => {
-
-    // dispatch(setUserLoginDetails({
-    //   name: user.displayName,
-    //   email: user.email,
-    //   photo: user.photoURL
-    // }))
-  }
 
   return (
       <Nav>

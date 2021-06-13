@@ -6,19 +6,17 @@ import Recommends from '../Film/Recommends';
 import NewFilm from '../Film/NewFilm';
 import Originals from '../Film/Originals';
 import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchFilms, setMovies} from '../../../features/movies/movieSlide';
+import {useDispatch} from 'react-redux';
+import {fetchFilms} from '../../../features/movies/movieSlide';
 import Trending from '../Film/Trending';
 
 function Home(props) {
   
   const dispatch = useDispatch();
-  const userName = 'huyhq';
   
-  useEffect(async () => {
-    await dispatch(fetchFilms());
+  useEffect( () => {
+    dispatch( fetchFilms());
     return () => {
-    
     };
   }, [dispatch]);
   
